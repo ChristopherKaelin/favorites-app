@@ -2,13 +2,30 @@ import { useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
+import { SignIn } from './components/SignIn'
+import { useAuth } from './context/AuthContext'
+import { supabase } from './lib/supabase'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const { session, loading } = useAuth()
 
   return (
     <>
+      {loading ? (
+        <p>Loading session...</p>
+      ) : session ? (
+        <div>
+          <p>Signed in as {session.user.email}</p>
+          <button type="button" onClick={() => supabase.auth.signOut()}>
+            Sign out
+          </button>
+        </div>
+      ) : (
+        <SignIn />
+      )}
+
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
