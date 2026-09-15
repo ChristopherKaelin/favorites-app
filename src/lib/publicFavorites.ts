@@ -28,6 +28,7 @@ export async function fetchPublicFavorites(): Promise<PublicCategory[]> {
   const { data: links, error: linksError } = await supabase
     .from('links')
     .select('id, title, url, icon_url, category_id')
+    .order('sort_order', { ascending: true })
 
   if (linksError) {
     throw linksError

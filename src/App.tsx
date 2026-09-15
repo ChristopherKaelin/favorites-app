@@ -1,5 +1,6 @@
 import { PublicFavorites } from './components/PublicFavorites'
 import { SignIn } from './components/SignIn'
+import { UserFavorites } from './components/UserFavorites'
 import { useAuth } from './context/AuthContext'
 import { supabase } from './lib/supabase'
 import './App.css'
@@ -13,10 +14,13 @@ function App() {
         <p>Loading session...</p>
       ) : session ? (
         <div>
-          <p>Signed in as {session.user.email}</p>
-          <button type="button" onClick={() => supabase.auth.signOut()}>
-            Sign out
-          </button>
+          <div className="account-bar">
+            <p className="welcome-text">Welcome {session.user.user_metadata.display_name}</p>
+            <button type="button" onClick={() => supabase.auth.signOut()}>
+              Sign out
+            </button>
+          </div>
+          <UserFavorites />
         </div>
       ) : (
         <>

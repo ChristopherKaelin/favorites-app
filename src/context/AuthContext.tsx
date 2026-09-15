@@ -3,6 +3,9 @@ import type { ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
+const IDLE_TIMEOUT_MS = 15 * 60 * 1000
+const ACTIVITY_EVENTS = ['mousemove', 'keydown', 'click', 'scroll'] as const
+
 interface AuthContextType {
   session: Session | null
   loading: boolean
@@ -28,6 +31,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  // Sign out after a period of inactivity, but only while a session exists --
+  // no point tracking activity for a logged-out visitor.
+  useEffect(() => {
+    if (!session) {
+      return
+    }
+
+    let timeoutId: ReturnType<typeof setTimeout>
+
+    function resetTimer() {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        supabase.auth.signOut()
+      }, IDLE_TIMEOUT_MS)
+    }
+
+    resetTimer()
+    ACTIVITY_EVENTS.forEach((event) => window.addEventListener(event, resetTimer))
+
+    return () => {
+      clearTimeout(timeoutId)
+      ACTIVITY_EVENTS.forEach((event) =>
+        window.removeEventListener(event, resetTimer),
+      )
+    }
+  }, [session])
 
   return (
     <AuthContext.Provider value={{ session, loading }}>

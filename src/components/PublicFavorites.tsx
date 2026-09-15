@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchPublicFavorites } from '../lib/publicFavorites'
 import type { PublicCategory } from '../lib/publicFavorites'
+import { LinkIcon } from './LinkIcon'
 
 export function PublicFavorites() {
   const [categories, setCategories] = useState<PublicCategory[]>([])
@@ -43,11 +44,12 @@ export function PublicFavorites() {
   return (
     <div>
       {categories.map((category) => (
-        <div key={category.id}>
+        <div key={category.id} className="public-category">
           <h2>{category.name}</h2>
           <ul>
             {category.links.map((link) => (
-              <li key={link.id}>
+              <li key={link.id} className="link-row">
+                <LinkIcon url={link.url} iconUrl={link.icon_url} />
                 <a href={link.url} target="_blank" rel="noreferrer">
                   {link.title}
                 </a>

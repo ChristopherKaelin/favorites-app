@@ -1,3 +1,264 @@
+form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
 li {
   list-style: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.link-icon {
+  flex: none;
+  border-radius: 2px;
+}
+
+.link-icon-fallback {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-hover);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  flex: none;
+}
+
+.icon-button svg {
+  color: var(--ink-soft);
+}
+
+.icon-button:hover:not(:disabled) svg {
+  color: var(--accent-hover);
+}
+
+.move-popover {
+  position: relative;
+  display: inline-flex;
+}
+
+.move-popover-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  margin: 4px 0 0;
+  padding: 4px 0;
+  min-width: 160px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+.move-popover-menu li + li {
+  border-top: 1px solid var(--border);
+}
+
+.move-popover-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.move-popover-menu button:hover {
+  color: var(--accent-hover);
+  border-color: transparent;
+}
+
+.user-link-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-link-row + .user-link-row {
+  margin-top: 6px;
+}
+
+.user-link-row .link-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.user-link-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 198px;
+}
+
+.user-category-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.user-category-row .category-name {
+  margin: 0;
+}
+
+ul + form {
+  margin-top: 12px;
+}
+
+#new-category {
+  min-width: 300px;
+}
+
+input[type='url'] {
+  min-width: 300px;
+}
+
+.account-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-text {
+  font-size: 30px;
+}
+
+.demo-note {
+  margin-bottom: 0.5rem;
+}
+
+.public-category {
+  margin-bottom: 0.75rem;
+}
+
+.public-category h2 {
+  font-size: 30px;
+  margin-bottom: 1rem;
+}
+
+.link-row + .link-row {
+  margin-top: 0.5rem;
+}
+
+.signin-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2rem;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+.signin-form > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signin-form label {
+  min-width: 70px;
+  text-align: right;
+}
+
+.signin-form > button {
+  width: 160px;
+  margin-left: 78px;
+}
+
+.category-card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.add-category-form {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 4px;
+  width: 140px;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.category-card-name {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.category-card-count {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.category-card.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+.category-card.active .category-card-name {
+  color: var(--surface);
+}
+
+.category-card.active .category-card-count {
+  color: var(--surface);
+  opacity: 0.8;
+}
+
+.category-card.active:hover {
+  color: var(--surface);
+  border-color: var(--accent);
+}
+
+.category-card.active:hover .category-card-name {
+  color: var(--surface);
 }
