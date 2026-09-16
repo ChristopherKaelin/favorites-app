@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, setAuthPersistence } from '../lib/supabase'
 
 const DEMO_EMAIL = 'demo@christopherkaelin.com'
 const DEMO_PASSWORD = 'D3mo@Chr1sKa3l1n'
@@ -14,6 +14,8 @@ export function SignIn() {
   async function signIn(signInEmail: string, signInPassword: string) {
     setError(null)
     setLoading(true)
+
+    setAuthPersistence(signInEmail !== DEMO_EMAIL)
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: signInEmail,
