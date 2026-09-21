@@ -7,6 +7,7 @@ export interface UserLink {
   icon_url: string | null
   category_id: string
   sort_order: number
+  click_count: number
 }
 
 export interface UserCategory {
@@ -28,7 +29,7 @@ export async function fetchUserFavorites(): Promise<UserCategory[]> {
 
   const { data: links, error: linksError } = await supabase
     .from('links')
-    .select('id, title, url, icon_url, category_id, sort_order')
+    .select('id, title, url, icon_url, category_id, sort_order, click_count')
     .order('sort_order', { ascending: true })
 
   if (linksError) {
@@ -128,7 +129,7 @@ export async function createLink(
   const { data, error } = await supabase
     .from('links')
     .insert({ user_id: user.id, category_id: categoryId, title, url, sort_order: sortOrder })
-    .select('id, title, url, icon_url, category_id, sort_order')
+    .select('id, title, url, icon_url, category_id, sort_order, click_count')
     .single()
 
   if (error) {
@@ -151,7 +152,7 @@ export async function moveLink(linkId: string, categoryId: string, sortOrder: nu
     .from('links')
     .update({ category_id: categoryId, sort_order: sortOrder })
     .eq('id', linkId)
-    .select('id, title, url, icon_url, category_id, sort_order')
+    .select('id, title, url, icon_url, category_id, sort_order, click_count')
     .single()
 
   if (error) {
@@ -166,7 +167,7 @@ export async function updateLink(linkId: string, title: string, url: string) {
     .from('links')
     .update({ title, url })
     .eq('id', linkId)
-    .select('id, title, url, icon_url, category_id, sort_order')
+    .select('id, title, url, icon_url, category_id, sort_order, click_count')
     .single()
 
   if (error) {
@@ -174,6 +175,14 @@ export async function updateLink(linkId: string, title: string, url: string) {
   }
 
   return data
+}
+
+export async function incrementLinkClick(linkId: string) {
+  const { error } = await supabase.rpc('increment_link_click', { link_id: linkId })
+
+  if (error) {
+    throw error
+  }
 }
 
 export async function swapLinkOrder(

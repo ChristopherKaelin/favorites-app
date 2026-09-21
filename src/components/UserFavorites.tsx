@@ -5,6 +5,7 @@ import {
   deleteCategory,
   deleteLink,
   fetchUserFavorites,
+  incrementLinkClick,
   moveLink,
   renameCategory,
   swapCategoryOrder,
@@ -24,6 +25,7 @@ import BlankIcon from '../assets/icons/blank.svg?react'
 import PlusIcon from '../assets/icons/plus.svg?react'
 
 const DEMO_EMAIL = 'demo@christopherkaelin.com'
+const ALL_LINKS_VIEW = 'all-links'
 
 interface LinkDraft {
   title: string
@@ -85,7 +87,11 @@ export function UserFavorites() {
       .then((data) => {
         if (!cancelled) {
           setCategories(data)
-          setSelectedCategoryId(data.length > 0 ? data[0].id : null)
+          if (data.length === 0) {
+            setSelectedCategoryId(null)
+          } else {
+            setSelectedCategoryId(isDemo ? data[0].id : ALL_LINKS_VIEW)
+          }
         }
       })
       .catch((err) => {
@@ -102,7 +108,7 @@ export function UserFavorites() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [isDemo])
 
   async function handleCreateCategory(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -232,6 +238,25 @@ export function UserFavorites() {
     } finally {
       setReorderingCategoryId(null)
     }
+  }
+
+  function handleLinkClick(link: UserLink) {
+    if (isDemo) {
+      return
+    }
+
+    setCategories((prev) =>
+      prev.map((c) => ({
+        ...c,
+        links: c.links.map((l) =>
+          l.id === link.id ? { ...l, click_count: l.click_count + 1 } : l,
+        ),
+      })),
+    )
+
+    incrementLinkClick(link.id).catch((err) => {
+      console.error('Failed to record link click', err)
+    })
   }
 
   function getLinkDraft(categoryId: string): LinkDraft {
@@ -435,6 +460,10 @@ export function UserFavorites() {
   const selectedCategoryIndex = categories.findIndex((c) => c.id === selectedCategoryId)
   const selectedCategory =
     selectedCategoryIndex === -1 ? null : categories[selectedCategoryIndex]
+  const isAllLinksView = !isDemo && selectedCategoryId === ALL_LINKS_VIEW
+  const allLinks = categories
+    .flatMap((c) => c.links)
+    .sort((a, b) => a.title.localeCompare(b.title))
 
   const addCategoryForm = (
     <form className="add-category-form" onSubmit={handleCreateCategory}>
@@ -479,6 +508,18 @@ export function UserFavorites() {
       ) : (
         <>
           <div className="category-card-row">
+            {!isDemo && (
+              <button
+                type="button"
+                className={`category-card${isAllLinksView ? ' active' : ''}`}
+                onClick={() => setSelectedCategoryId(ALL_LINKS_VIEW)}
+              >
+                <span className="category-card-name">All Links</span>
+                <span className="category-card-count">
+                  {categories.reduce((sum, c) => sum + c.links.length, 0)} links
+                </span>
+              </button>
+            )}
             {categories.map((category) => (
               <button
                 key={category.id}
@@ -500,7 +541,33 @@ export function UserFavorites() {
             ))}
           </div>
           {addCategoryForm}
-          {selectedCategory && (
+          {isAllLinksView && (
+            <div>
+              <h2 className="category-name">All Links</h2>
+              {allLinks.length === 0 ? (
+                <p>No links yet.</p>
+              ) : (
+                <ul>
+                  {allLinks.map((link) => (
+                    <li key={link.id} className="user-link-row">
+                      <LinkIcon url={link.url} iconUrl={link.icon_url} />
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="link-title"
+                        onClick={() => handleLinkClick(link)}
+                      >
+                        {link.title}
+                      </a>
+                      ({link.click_count})
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+          {!isAllLinksView && selectedCategory && (
             <div>
               {editingCategoryId === selectedCategory.id ? (
                 <form onSubmit={(e) => handleRenameCategory(e, selectedCategory.id)}>
@@ -618,6 +685,7 @@ export function UserFavorites() {
                           target="_blank"
                           rel="noreferrer"
                           className="link-title"
+                          onClick={() => handleLinkClick(link)}
                         >
                           {link.title}
                         </a>

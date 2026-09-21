@@ -98,6 +98,7 @@ ul {
   display: grid;
   grid-template-columns: 20px 1fr auto;
   align-items: center;
+  padding: 0px 12px;
   gap: 8px;
 }
 
@@ -110,6 +111,11 @@ ul {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
+}
+
+.user-link-row:hover {
+  background-color: var(--surface);
+  border-radius: 6px;
 }
 
 .user-link-actions {
