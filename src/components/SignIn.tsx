@@ -69,9 +69,12 @@ export function SignIn() {
             <input
               id="email"
               type="email"
+              placeholder="Login EMail"
+              aria-label="Enter login email id"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoFocus
             />
           </div>
           <div>
@@ -79,6 +82,8 @@ export function SignIn() {
             <input
               id="password"
               type="password"
+              placeholder="Password"
+              aria-label="Enter login password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

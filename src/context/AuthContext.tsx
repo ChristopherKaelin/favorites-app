@@ -66,6 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// Hook lives beside the provider on purpose; editing this file does a full
+// reload instead of Fast Refresh, which is fine for a rarely-touched file.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {

@@ -111,11 +111,33 @@ ul {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
+  padding-left: 6px;
 }
 
-.user-link-row:hover {
-  background-color: var(--surface);
+.all-links:hover,
+.link-title:hover  {
+  background-color: var(--link-hover);
   border-radius: 6px;
+}
+
+.link-search {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.link-search input {
+  width: 260px;
+  padding-left: 32px;
+}
+
+.link-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  pointer-events: none;
 }
 
 .user-link-actions {
@@ -196,18 +218,23 @@ input[type='url'] {
 
 .signin-form > div {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 
 .signin-form label {
-  min-width: 70px;
-  text-align: right;
+  text-align: left;
+}
+
+.signin-form input {
+  width: 300px;
+  box-sizing: border-box;
+  background-color: var(--border);
 }
 
 .signin-form > button {
   width: 160px;
-  margin-left: 78px;
 }
 
 .category-card-row {
@@ -219,7 +246,13 @@ input[type='url'] {
 
 .add-category-form {
   margin-top: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: 40px 0 40px;
 }
 
 .category-card {
@@ -246,25 +279,12 @@ input[type='url'] {
 }
 
 .category-card.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--surface);
-}
-
-.category-card.active .category-card-name {
-  color: var(--surface);
-}
-
-.category-card.active .category-card-count {
-  color: var(--surface);
-  opacity: 0.8;
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+  color: var(--accent);
 }
 
 .category-card.active:hover {
   color: var(--surface);
   border-color: var(--accent);
-}
-
-.category-card.active:hover .category-card-name {
-  color: var(--surface);
 }

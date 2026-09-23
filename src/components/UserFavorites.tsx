@@ -13,6 +13,8 @@ import {
   updateLink,
 } from '../lib/userFavorites'
 import type { UserCategory, UserLink } from '../lib/userFavorites'
+import { filterLinks } from '../lib/searchLinks'
+import { nextSortOrder } from '../lib/sortOrder'
 import { useAuth } from '../context/AuthContext'
 import { LinkIcon } from './LinkIcon'
 import { IconButton } from './IconButton'
@@ -23,6 +25,7 @@ import UpIcon from '../assets/icons/up.svg?react'
 import DownIcon from '../assets/icons/down.svg?react'
 import BlankIcon from '../assets/icons/blank.svg?react'
 import PlusIcon from '../assets/icons/plus.svg?react'
+import SearchIcon from '../assets/icons/search.svg?react'
 
 const DEMO_EMAIL = 'demo@christopherkaelin.com'
 const ALL_LINKS_VIEW = 'all-links'
@@ -41,6 +44,7 @@ export function UserFavorites() {
   const [error, setError] = useState<string | null>(null)
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const [newCategoryName, setNewCategoryName] = useState('')
   const [creatingCategory, setCreatingCategory] = useState(false)
@@ -121,8 +125,7 @@ export function UserFavorites() {
     setCreateCategoryError(null)
 
     try {
-      const nextSortOrder = categories.length
-      const created = await createCategory(name, nextSortOrder)
+      const created = await createCategory(name, nextSortOrder(categories))
       setCategories((prev) => [...prev, { ...created, links: [] }])
       setNewCategoryName('')
     } catch (err) {
@@ -286,8 +289,12 @@ export function UserFavorites() {
     setCreateLinkError(null)
 
     try {
-      const nextSortOrder = category.links.length
-      const created = await createLink(category.id, title, url, nextSortOrder)
+      const created = await createLink(
+        category.id,
+        title,
+        url,
+        nextSortOrder(category.links),
+      )
       setCategories((prev) =>
         prev.map((c) =>
           c.id === category.id ? { ...c, links: [...c.links, created] } : c,
@@ -392,8 +399,11 @@ export function UserFavorites() {
     setMoveLinkError(null)
 
     try {
-      const nextSortOrder = targetCategory.links.length
-      const updated = await moveLink(link.id, targetCategoryId, nextSortOrder)
+      const updated = await moveLink(
+        link.id,
+        targetCategoryId,
+        nextSortOrder(targetCategory.links),
+      )
       setCategories((prev) =>
         prev.map((c) => {
           if (c.id === currentCategoryId) {
@@ -464,6 +474,7 @@ export function UserFavorites() {
   const allLinks = categories
     .flatMap((c) => c.links)
     .sort((a, b) => a.title.localeCompare(b.title))
+  const visibleLinks = filterLinks(allLinks, searchQuery)
 
   const addCategoryForm = (
     <form className="add-category-form" onSubmit={handleCreateCategory}>
@@ -541,15 +552,39 @@ export function UserFavorites() {
             ))}
           </div>
           {addCategoryForm}
+          <hr className="section-divider" />
           {isAllLinksView && (
             <div>
+              <div className="link-search">
+                <SearchIcon
+                  className="link-search-icon"
+                  width={16}
+                  height={16}
+                  aria-hidden="true"
+                />
+                <input
+                  type="search"
+                  placeholder="Search titles and URLs"
+                  aria-label="Search links by title or URL"
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      setSearchQuery('')
+                    }
+                  }}
+                />
+              </div>
               <h2 className="category-name">All Links</h2>
               {allLinks.length === 0 ? (
                 <p>No links yet.</p>
+              ) : visibleLinks.length === 0 ? (
+                <p>{`No links match "${searchQuery.trim()}".`}</p>
               ) : (
                 <ul>
-                  {allLinks.map((link) => (
-                    <li key={link.id} className="user-link-row">
+                  {visibleLinks.map((link) => (
+                    <li key={link.id} className="user-link-row all-links">
                       <LinkIcon url={link.url} iconUrl={link.icon_url} />
                       <a
                         href={link.url}
@@ -684,9 +719,10 @@ export function UserFavorites() {
                           href={link.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="link-title"
+                          className="link-title cat-links"
                           onClick={() => handleLinkClick(link)}
                         >
+
                           {link.title}
                         </a>
                         <div className="user-link-actions">

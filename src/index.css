@@ -1,11 +1,40 @@
 :root {
-  --bg: #efe3c8;
-  --surface: #faf5e8;
-  --ink: #2b241c;
-  --ink-soft: #5c5140;
-  --accent: #3b5d45;
-  --accent-hover: #b8863b;
-  --border: #d8c6a0;
+  /* Light palette */
+  --light-bg: #efe3c8;
+  --light-surface: #faf5e8;
+  --light-ink: #2b241c;
+  --light-ink-soft: #5c5140;
+  --light-accent: #3b5d45;
+  --light-accent-hover: #b8863b;
+  --light-accent-fill: #7fa487;
+  --light-on-accent: #faf5e8;
+  --light-border: #d8c6a0;
+  --light-divider: #c4ae82;
+
+  /* Dark palette */
+  --dark-bg: #1c1814;
+  --dark-surface: #26211b;
+  --dark-ink: #ece0c6;
+  --dark-ink-soft: #b3a68c;
+  --dark-accent: #7fa487;
+  --dark-accent-hover: #d4a25a;
+  --dark-accent-fill: #3b5d45;
+  --dark-on-accent: #f3ead6;
+  --dark-border: #3d3428;
+  --dark-divider: #574a3a;
+
+  /* Dark theme (components use these) */
+  --bg: var(--dark-bg);
+  --surface: var(--dark-surface);
+  --ink: var(--dark-ink);
+  --ink-soft: var(--dark-ink-soft);
+  --accent: var(--dark-accent);
+  --accent-hover: var(--dark-accent-hover);
+  --accent-fill: var(--dark-accent-fill);
+  --on-accent: var(--dark-on-accent);
+  --border: var(--dark-border);
+  --divider: var(--dark-divider);
+  --link-hover: var(--dark-accent-fill);
 
   --serif: 'Fraunces', Georgia, serif;
   --sans: 'Work Sans', system-ui, sans-serif;
