@@ -94,6 +94,16 @@ ul {
   border-color: transparent;
 }
 
+.all-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: 16px;
+}
+
+.all-links-grid .user-link-row + .user-link-row {
+  margin-top: 0;
+}
+
 .user-link-row {
   display: grid;
   grid-template-columns: 20px 1fr auto;
@@ -260,9 +270,9 @@ input[type='url'] {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 4px;
-  width: 140px;
-  padding: 12px 16px;
+  gap: 2px;
+  width: 136px;
+  padding: 8px 12px;
   border-radius: 6px;
 }
 

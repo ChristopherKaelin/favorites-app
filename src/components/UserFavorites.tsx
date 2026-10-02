@@ -473,7 +473,7 @@ export function UserFavorites() {
   const isAllLinksView = !isDemo && selectedCategoryId === ALL_LINKS_VIEW
   const allLinks = categories
     .flatMap((c) => c.links)
-    .sort((a, b) => a.title.localeCompare(b.title))
+    .sort((a, b) => b.click_count - a.click_count || a.title.localeCompare(b.title))
   const visibleLinks = filterLinks(allLinks, searchQuery)
 
   const addCategoryForm = (
@@ -582,7 +582,7 @@ export function UserFavorites() {
               ) : visibleLinks.length === 0 ? (
                 <p>{`No links match "${searchQuery.trim()}".`}</p>
               ) : (
-                <ul>
+                <ul className="all-links-grid">
                   {visibleLinks.map((link) => (
                     <li key={link.id} className="user-link-row all-links">
                       <LinkIcon url={link.url} iconUrl={link.icon_url} />
@@ -595,7 +595,6 @@ export function UserFavorites() {
                       >
                         {link.title}
                       </a>
-                      ({link.click_count})
                     </li>
                   ))}
                 </ul>
