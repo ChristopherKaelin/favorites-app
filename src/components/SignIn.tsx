@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase, setAuthPersistence } from '../lib/supabase'
+import { trackDemoClick } from '../lib/publicClickTracking'
 
 const DEMO_EMAIL = 'demo@christopherkaelin.com'
 const DEMO_PASSWORD = 'D3mo@Chr1sKa3l1n'
@@ -44,6 +45,7 @@ export function SignIn() {
   }
 
   const handleTryDemo = async () => {
+    trackDemoClick()
     await signIn(DEMO_EMAIL, DEMO_PASSWORD)
   }
 

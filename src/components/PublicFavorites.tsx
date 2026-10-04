@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchPublicFavorites } from '../lib/publicFavorites'
 import type { PublicCategory } from '../lib/publicFavorites'
+import { trackPublicLinkClick } from '../lib/publicClickTracking'
 import { LinkIcon } from './LinkIcon'
 
 export function PublicFavorites() {
@@ -50,7 +51,12 @@ export function PublicFavorites() {
             {category.links.map((link) => (
               <li key={link.id} className="link-row">
                 <LinkIcon url={link.url} iconUrl={link.icon_url} />
-                <a href={link.url} target="_blank" rel="noreferrer">
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => trackPublicLinkClick(link.id)}
+                >
                   {link.title}
                 </a>
               </li>
