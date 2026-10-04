@@ -23,6 +23,22 @@
   --dark-border: #3d3428;
   --dark-divider: #574a3a;
 
+  /* Icon backing (constant — favicons assume a light tab, in both themes) */
+  --icon-backing: #faf5e8;
+
+  /* Light theme (components use these) */
+  --bg: var(--light-bg);
+  --surface: var(--light-surface);
+  --ink: var(--light-ink);
+  --ink-soft: var(--light-ink-soft);
+  --accent: var(--light-accent);
+  --accent-hover: var(--light-accent-hover);
+  --accent-fill: var(--light-accent-fill);
+  --on-accent: var(--light-on-accent);
+  --border: var(--light-border);
+  --divider: var(--light-divider);
+  --link-hover: var(--light-accent-fill);
+
   /* Dark theme (components use these) */
   --bg: var(--dark-bg);
   --surface: var(--dark-surface);
@@ -40,7 +56,7 @@
   --sans: 'Work Sans', system-ui, sans-serif;
 
   font: 17px/150% var(--sans);
-  color-scheme: light;
+  color-scheme: dark;
   color: var(--ink);
   background: var(--bg);
   font-synthesis: none;

@@ -22,7 +22,17 @@ ul {
   text-align: left;
 }
 
+.link-icon-backing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--icon-backing);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
 .link-icon {
+  display: block;
   flex: none;
   border-radius: 2px;
 }

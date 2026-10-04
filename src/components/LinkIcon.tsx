@@ -32,13 +32,15 @@ export function LinkIcon({ url, iconUrl, size = 20 }: LinkIconProps) {
   }
 
   return (
-    <img
-      src={src}
-      alt=""
-      width={size}
-      height={size}
-      className="link-icon"
-      onError={() => setFailed(true)}
-    />
+    <span className="link-icon-backing" style={{ width: size, height: size }}>
+      <img
+        src={src}
+        alt=""
+        width={size - 4}
+        height={size - 4}
+        className="link-icon"
+        onError={() => setFailed(true)}
+      />
+    </span>
   )
 }
