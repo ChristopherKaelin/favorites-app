@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   createCategory,
   createLink,
@@ -45,6 +45,7 @@ export function UserFavorites() {
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const [newCategoryName, setNewCategoryName] = useState('')
   const [creatingCategory, setCreatingCategory] = useState(false)
@@ -113,6 +114,32 @@ export function UserFavorites() {
       cancelled = true
     }
   }, [isDemo])
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key !== '/') {
+        return
+      }
+      if (isDemo || selectedCategoryId !== ALL_LINKS_VIEW) {
+        return
+      }
+
+      const active = document.activeElement as HTMLElement | null
+      const tag = active?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || active?.isContentEditable) {
+        return
+      }
+
+      e.preventDefault()
+      searchRef.current?.focus()
+      searchRef.current?.select()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isDemo, selectedCategoryId])
 
   async function handleCreateCategory(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -563,6 +590,7 @@ export function UserFavorites() {
                   aria-hidden="true"
                 />
                 <input
+                  ref={searchRef}
                   type="search"
                   placeholder="Search titles and URLs"
                   aria-label="Search links by title or URL"
